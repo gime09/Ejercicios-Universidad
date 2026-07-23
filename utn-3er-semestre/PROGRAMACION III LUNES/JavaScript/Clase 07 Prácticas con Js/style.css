@@ -1,0 +1,29 @@
+body {
+  font-family: sans-serif;
+  text-align: center;
+  background: #f0f0f0;
+}
+
+#tablero {
+  display: grid;
+  grid-template-columns: repeat(8, 50px);
+  gap: 2px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.celda {
+  width: 50px;
+  height: 50px;
+  background-color: white;
+  border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+}
+
+.negra {
+  background-color: #333;
+  color: white;
+}

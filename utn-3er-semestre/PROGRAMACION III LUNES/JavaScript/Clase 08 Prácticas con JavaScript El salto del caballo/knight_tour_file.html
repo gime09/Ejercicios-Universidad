@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Salto del Caballo - Todas las Soluciones</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      color: white;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .controls {
+      background: rgba(255,255,255,0.1);
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      backdrop-filter: blur(10px);
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: inline-block;
+      width: 150px;
+      text-align: right;
+      margin-right: 10px;
+      font-weight: bold;
+    }
+
+    input, select {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      margin: 5px;
+    }
+
+    button {
+      background: linear-gradient(45deg, #ff6b6b, #ff8e53);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      margin: 10px;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+
+    button:disabled {
+      background: #666;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .board-container {
+      background: rgba(255,255,255,0.1);
+      padding: 20px;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      display: inline-block;
+    }
+
+    .board {
+      border: 3px solid #333;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    }
+
+    .board table {
+      border-collapse: collapse;
+    }
+
+    .board td {
+      width: 50px;
+      height: 50px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 14px;
+      border: 1px solid #333;
+      position: relative;
+    }
+
+    .light {
+      background-color: #f0d9b5;
+      color: #333;
+    }
+
+    .dark {
+      background-color: #b58863;
+      color: white;
+    }
+
+    .knight-path {
+      animation: highlight 0.5s ease-in-out;
+    }
+
+    @keyframes highlight {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); background-color: #ffeb3b; }
+      100% { transform: scale(1); }
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      background: rgba(255,255,255,0.1);
+      padding: 15px;
+      border-radius: 10px;
+      margin: 5px;
+      min-width: 150px;
+    }
+
+    .stat-value {
+      font-size: 2em;
+      font-weight: bold;
+      color: #ffeb3b;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 20px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4caf50, #8bc34a);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .solution-nav {
+      margin: 20px 0;
+    }
+
+    .status {
+      font-size: 1.2em;
+      margin: 10px 0;
+    }
+
+    @media (max-width: 768px) {
+      .board td {
+        width: 35px;
+        height: 35px;
+        font-size: 12px;
+      }
+      
+      h1 {
+        font-size: 2em;
+      }
+      
+      .controls {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🐴 Salto del Caballo - Explorador de Soluciones</h1>
+    
+    <div class="controls">
+      <div class="input-group">
+        <label for="boardSize">Tamaño del tablero:</label>
+        <select id="boardSize">
+          <option value="5">5x5</option>
+          <option value="6">6x6</option>
+          <option value="7">7x7</option>
+          <option value="8" selected>8x8</option>
+        </select>
+      </div>
+      
+      <div class="input-group">
+        <label for="startX">Posición inicial X:</label>
+        <input type="number" id="startX" min="0" max="7" value="0">
+        <label for="startY">Y:</label>
+        <input type="number" id="startY" min="0" max="7" value="0">
+      </div>
+      
+      <div class="input-group">
+        <label for="maxSolutions">Máximo de soluciones:</label>
+        <input type="number" id="maxSolutions" min="1" max="100" value="10">
+      </div>
+      
+      <button id="startBtn">🔍 Buscar Soluciones</button>
+      <button id="stopBtn" disabled>⏹️ Detener</button>
+      <button id="animateBtn" disabled>🎬 Animar Solución</button>
+    </div>
+
+    <div class="stats">
+      <div class="stat-item">
+        <div class="stat-value" id="solutionsFound">0</div>
+        <div>Soluciones Encontradas</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="timeElapsed">0</div>
+        <div>Tiempo (seg)</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="nodesExplored">0</div>
+        <div>Nodos Explorados</div>
+      </div>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div class="status" id="status">Listo para comenzar</div>
+
+    <div class="solution-nav" id="solutionNav" style="display: none;">
+      <button id="prevBtn">⬅️ Anterior</button>
+      <span id="solutionInfo">Solución 1 de 1</span>
+      <button id="nextBtn">➡️ Siguiente</button>
+    </div>
+
+    <div class="board-container">
+      <div class="board" id="board"></div>
+    </div>
+  </div>
+
+  <!-- Enlace al archivo JavaScript -->
+  <script src="knight_tour.js"></script>
+</body>
+</html>

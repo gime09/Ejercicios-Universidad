@@ -1,0 +1,22 @@
+@startuml
+
+class Pelicula {
+    + nombre: str
+    + __str__(): str
+}
+
+class CatalogoPeliculas {
+    + ruta_archivo: str
+    + agregar_pelicula(pelicula: Pelicula)
+    + listar_peliculas()
+    + eliminar()
+}
+
+class test_catalogo_peliculas {
+    + mostrar_menu()
+}
+
+test_catalogo_peliculas --> CatalogoPeliculas : usa
+CatalogoPeliculas --> Pelicula : usa
+
+@enduml
